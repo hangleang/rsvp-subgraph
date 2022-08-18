@@ -1,6 +1,39 @@
-type ExampleEntity @entity {
+type Event @entity {
   id: ID!
-  count: BigInt!
-  eventId: Bytes! # bytes32
-  attendee: Bytes! # address
+  eventId: Bytes!
+  creator: Bytes!
+  title: String!
+  description: String
+  startDate: BigInt!
+  deposit: BigInt!
+  maxAttendees: Int!
+  paidOut: Boolean!
+  unclaimedAmount: BigInt
+  link: String
+  imageURL: String
+  totalRSVPs: Int!
+  totalConfirmed: Int!
+  rsvps: [RSVPOnEvent!] @derivedFrom(field: "event")
+  comfirmedAttendees: [AttendedOnEvent!] @derivedFrom(field: "event")
+}
+
+type Attendee @entity {
+  id: ID!
+  user: Bytes!
+  totalRSVPs: Int!
+  totalAttendedEvents: Int!
+  rsvps: [RSVPOnEvent!] @derivedFrom(field: "attendee")
+  attendedEvents: [AttendedOnEvent!] @derivedFrom(field: "attendee")
+}
+
+type RSVPOnEvent @entity {
+  id: ID!
+  attendee: Attendee!
+  event: Event!
+}
+
+type AttendedOnEvent @entity {
+  id: ID!
+  attendee: Attendee!
+  event: Event!
 }
